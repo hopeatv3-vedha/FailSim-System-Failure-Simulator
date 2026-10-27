@@ -1,0 +1,61 @@
+#ifndef FAILSIM_TOKEN_H
+#define FAILSIM_TOKEN_H
+
+typedef enum {
+    TOKEN_EOF = 0,
+    TOKEN_IDENTIFIER,
+
+    TOKEN_SYSTEM,
+    TOKEN_COMPONENT,
+    TOKEN_TYPE,
+    TOKEN_DEPENDS,
+    TOKEN_OPTIONAL,
+    TOKEN_ON,
+    TOKEN_CONNECTS,
+    TOKEN_TO,
+    TOKEN_STATE,
+    TOKEN_RECOVERY,
+    TOKEN_USE,
+    TOKEN_REDIRECT,
+    TOKEN_SCENARIO,
+    TOKEN_FAIL,
+    TOKEN_END,
+    TOKEN_GROUP,
+    TOKEN_CRITICALITY,
+
+    TOKEN_CLIENT,
+    TOKEN_CDN,
+    TOKEN_GATEWAY,
+    TOKEN_LOAD_BALANCER,
+    TOKEN_AUTH,
+    TOKEN_SERVICE,
+    TOKEN_DATABASE,
+    TOKEN_CACHE,
+    TOKEN_QUEUE,
+    TOKEN_WORKER,
+    TOKEN_STORAGE,
+    TOKEN_EXTERNAL_API,
+    TOKEN_MONITOR,
+    TOKEN_BACKUP,
+
+    TOKEN_RUNNING,
+    TOKEN_STOPPED,
+    TOKEN_STANDBY,
+    TOKEN_FAILED,
+
+    TOKEN_LOW,
+    TOKEN_MEDIUM,
+    TOKEN_HIGH,
+    TOKEN_CRITICAL
+} TokenType;
+
+typedef struct {
+    TokenType type;
+    char *lexeme;
+    int line;
+    int column;
+} Token;
+
+const char *token_type_name(TokenType type);
+
+#endif

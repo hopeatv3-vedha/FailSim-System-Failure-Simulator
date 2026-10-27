@@ -1,0 +1,53 @@
+SYSTEM LibraryPlatform
+GROUP PublicAPI
+GROUP DataLayer
+GROUP BackgroundJobs
+
+COMPONENT ReaderAPI TYPE SERVICE
+    GROUP PublicAPI
+    STATE RUNNING
+    CRITICALITY HIGH
+END
+
+COMPONENT CatalogDB TYPE DATABASE
+    GROUP DataLayer
+    STATE RUNNING
+    CRITICALITY CRITICAL
+END
+
+COMPONENT CatalogReplica TYPE BACKUP
+    GROUP DataLayer
+    STATE STANDBY
+    CRITICALITY HIGH
+END
+
+COMPONENT SearchCache TYPE CACHE
+    GROUP DataLayer
+    STATE RUNNING
+    CRITICALITY MEDIUM
+END
+
+COMPONENT IndexWorker TYPE WORKER
+    GROUP BackgroundJobs
+    STATE RUNNING
+    CRITICALITY MEDIUM
+END
+
+DEPENDS ReaderAPI ON CatalogDB
+OPTIONAL ReaderAPI ON SearchCache
+DEPENDS IndexWorker ON CatalogDB
+CONNECTS ReaderAPI TO IndexWorker
+
+RECOVERY CatalogDB
+    USE CatalogReplica
+    REDIRECT ReaderAPI TO CatalogReplica
+END
+
+SCENARIO CatalogDatabaseFailure
+    FAIL CatalogDB
+END
+
+SCENARIO DatabaseAndCacheFailure
+    FAIL CatalogDB
+    FAIL SearchCache
+END
